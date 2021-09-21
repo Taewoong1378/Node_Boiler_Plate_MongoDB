@@ -4,7 +4,7 @@ const { User } = require('../models/User');
 
 const router = express.Router();
 
-router.post('/register', (req, res) => {
+router.post('/', (req, res) => {
     const user = new User(req.body);
     // eslint-disable-next-line consistent-return
     // eslint-disable-next-line no-unused-vars
