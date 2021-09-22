@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const saltRounds = 10;
 
@@ -52,8 +53,35 @@ userSchema.pre('save', function (next) {
                 }
             });
         });        
+    } else {
+        next();
     }
 });
+
+userSchema.methods.comparePassword = function (plainPassword, cb) {
+    // eslint-disable-next-line consistent-return
+    bcrypt.compare(plainPassword, this.password, (err, isMatch) => {
+        if (err) {
+            cb(err);
+        } else {
+            cb(null, isMatch);
+        }
+    });
+};
+
+userSchema.methods.generateToken = function (cb) {
+    const user = this;
+    // jsonwebtoken을 이용해서 token을 생성하기
+    const token = jwt.sign(user._id.toHexString(), 'secretToken');
+    user.token = token;
+    user.save((err, userInfo) => {
+        if (err) {
+            cb(err);
+        } else {
+            cb(null, userInfo);
+        }
+    });
+};
 
 const User = mongoose.model('User', userSchema);
 
