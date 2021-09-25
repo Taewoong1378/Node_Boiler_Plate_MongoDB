@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const express = require('express');
 const { User } = require('../models/User');
+const { auth } = require('./middlewares');
 
 const router = express.Router();
 
@@ -55,6 +56,23 @@ router.post('/login', (req, res) => {
                 }
             });
         });
+    });
+});
+
+router.get('/logout', auth, (req, res) => {
+    User.findOneAndUpdate({ _id: req.user._id }, {
+        token: '',
+    }, (err) => {
+        if (err) {
+            res.json({
+                success: false,
+                err,
+            });
+        } else {
+            res.status(200).send({
+                success: true,
+            });
+        }
     });
 });
 
