@@ -1,11 +1,11 @@
 import React from 'react';
 
-function LendingPage() {
+function LandingPage() {
     return (
         <div>
-            LendingPage
+            LandingPage
         </div>
     );
 }
 
-export default LendingPage;
+export default LandingPage;
