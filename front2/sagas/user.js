@@ -20,16 +20,19 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    yield put({
-      type: LOG_IN_SUCCESS,
-      data: result.data,
-    });
+    if (result.data.loginSuccess === true) {
+      yield put({
+        type: LOG_IN_SUCCESS,
+        data: result,
+      });
+    } else {
+      yield put({
+        type: LOG_IN_FAILURE,
+        data: result,
+      });
+    }
   } catch (err) {
     console.error(err);
-    yield put({
-      type: LOG_IN_FAILURE,
-      error: err.response.data,
-    });
   }
 }
 

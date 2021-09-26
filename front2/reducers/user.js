@@ -1,15 +1,15 @@
 import produce from '../util/produce';
 
 export const initialState = {
-  loginSuccess: false,
-//   logoutSuccess
-//   signUpLoading: false, // 회원가입 시도중
-//   signUpDone: false,
-//   signUpError: null,
-//   me: null,
-//   userInfo: null,
-//   signUpData: {},
-//   loginData: {},
+  logInLoading: false, // 로그인 시도중
+  logInDone: false,
+  logOutLoading: false, // 로그아웃 시도중
+  logOutDone: false,
+  signUpLoading: false, // 회원가입 시도중
+  signUpDone: false,
+  signUpError: null,
+
+  loginResult: null,
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -29,29 +29,36 @@ export const loginRequestAction = (data) => ({
     data,
 });
 
+export const logoutRequestAction = () => ({
+  type: LOG_OUT_REQUEST,
+});
+
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
     case LOG_IN_REQUEST:
-      draft.loginSuccess = false;
+      draft.logInLoading = true;
+      draft.logInDone = false;
       break;
     case LOG_IN_SUCCESS:
-      draft.loginSuccess = action.data;
+      draft.logInLoading = false;
+      draft.loginResult = action.data;
+      draft.logInDone = true;
       break;
-    case LOG_IN_FAILURE:
+      case LOG_IN_FAILURE:
+      draft.logInLoading = false;
+      draft.loginResult = action.data;
+      draft.logInDone = false;
       break;
     case LOG_OUT_REQUEST:
       draft.logOutLoading = true;
-      draft.logOutError = null;
       draft.logOutDone = false;
       break;
     case LOG_OUT_SUCCESS:
       draft.logOutLoading = false;
       draft.logOutDone = true;
-      draft.me = null;
       break;
     case LOG_OUT_FAILURE:
       draft.logOutLoading = false;
-      draft.logOutError = action.error;
       break;
     case SIGN_UP_REQUEST:
       draft.signUpLoading = true;
