@@ -7,20 +7,23 @@ import { loginRequestAction } from '../reducers/user';
 
 function LoginPage() {
   const dispatch = useDispatch();
-  // const loginResult = useSelector((state) => state.user.loginResult);
+  const LoginSuccess = useSelector((state) => state.user.LoginSuccess);
+  const LoginMessage = useSelector((state) => state.user.LoginMessage);
   const logInDone = useSelector((state) => state.user.logInDone);
-
   const logInLoading = useSelector((state) => state.user.logInLoading);
   
   const divStyle = useMemo(() => ({ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }));
 
-  // useEffect(() => {
-  //   if (loginResult.data.loginSuccess) {
-  //       alert('로그인이 성공했습니다');
-  //     } else {
-  //       alert('로그인이 실패했습니다');
-  //   }
-  // }, [loginResult.data.loginSuccess]);
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (LoginSuccess) {
+        alert('로그인이 성공했습니다');
+      } else if (LoginSuccess === false) {
+        alert(`로그인이 실패했습니다. \n${LoginMessage}`);
+      } else {
+        return null;
+      }
+  }, [LoginSuccess, LoginMessage]);
 
   useEffect(() => {
     if (logInDone) {

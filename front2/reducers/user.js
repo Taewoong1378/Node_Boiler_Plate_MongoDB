@@ -9,7 +9,9 @@ export const initialState = {
   signUpDone: false,
   signUpError: null,
 
-  loginResult: null,
+  LoginSuccess: null,
+  LogOutSuccess: null,
+  LoginMessage: null,
 };
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
@@ -38,15 +40,18 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case LOG_IN_REQUEST:
       draft.logInLoading = true;
       draft.logInDone = false;
+      draft.logOutDone = false;
+      draft.LogOutSuccess = null;
       break;
     case LOG_IN_SUCCESS:
       draft.logInLoading = false;
-      draft.loginResult = action.data;
       draft.logInDone = true;
+      draft.LoginSuccess = action.data.data.loginSuccess;
       break;
       case LOG_IN_FAILURE:
       draft.logInLoading = false;
-      draft.loginResult = action.data;
+      draft.LoginSuccess = action.data.data.loginSuccess;
+      draft.LoginMessage = action.data.data.message;
       draft.logInDone = false;
       break;
     case LOG_OUT_REQUEST:
@@ -56,9 +61,15 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case LOG_OUT_SUCCESS:
       draft.logOutLoading = false;
       draft.logOutDone = true;
+      draft.LogOutSuccess = action.data.data.logoutSuccess;
+      draft.logInDone = false;
+      draft.LoginSuccess = null;
+      draft.LoginMessage = null;
       break;
     case LOG_OUT_FAILURE:
       draft.logOutLoading = false;
+      console.log(action.data);
+      draft.LogOutSuccess = action.data.data.logoutSuccess;
       break;
     case SIGN_UP_REQUEST:
       draft.signUpLoading = true;

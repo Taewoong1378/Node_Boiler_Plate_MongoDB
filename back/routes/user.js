@@ -65,12 +65,12 @@ router.post('/logout', auth, (req, res) => {
     }, (err) => {
         if (err) {
             res.json({
-                success: false,
+                logoutSuccess: false,
                 err,
             });
         } else {
             res.status(200).send({
-                success: true,
+                logoutSuccess: true,
             });
         }
     });

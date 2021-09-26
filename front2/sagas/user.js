@@ -36,22 +36,27 @@ function* logIn(action) {
   }
 }
 
-function logOutAPI() {
-  return axios.post('/user/logout');
+function logOutAPI(data) {
+  return axios.post('/user/logout', data);
 }
 
-function* logOut() {
+function* logOut(action) {
   try {
+    const result = yield call(logOutAPI, action.data);
     yield call(logOutAPI);
-    yield put({
-      type: LOG_OUT_SUCCESS,
-    });
+    if (result.data.logoutSuccess === true) {
+      yield put({
+        type: LOG_OUT_SUCCESS,
+        data: result,
+      });
+    } else {
+      yield put({
+        type: LOG_OUT_FAILURE,
+        data: result,
+      });
+    }
   } catch (err) {
     console.error(err);
-    yield put({
-      type: LOG_OUT_FAILURE,
-      error: err.response.data,
-    });
   }
 }
 
